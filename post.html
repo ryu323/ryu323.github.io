@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Clean Blog - Sample Post</title>
+    <title>Richard Yu</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -44,7 +44,6 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">Start Bootstrap</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -55,9 +54,6 @@
                     </li>
                     <li>
                         <a href="about.html">About</a>
-                    </li>
-                    <li>
-                        <a href="post.html">Sample Post</a>
                     </li>
                     <li>
                         <a href="contact.html">Contact</a>
@@ -76,9 +72,9 @@
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <div class="post-heading">
-                        <h1>Man must explore, and this is exploration at its greatest</h1>
-                        <h2 class="subheading">Problems look mighty small from 150 miles up</h2>
-                        <span class="meta">Posted by <a href="#">Start Bootstrap</a> on August 24, 2014</span>
+                        <h1>Estimating Uber fares with D3.js</h1>
+                        <h2 class="subheading">A project we did during week 3 of MKS32</h2>
+                        <span class="meta">Posted by <a href="#">Richard Yu</a> on January 31, 2016</span>
                     </div>
                 </div>
             </div>
@@ -90,40 +86,43 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    <p>Never in all their history have men been able truly to conceive of the world as one: a single sphere, a globe, having the qualities of a globe, a round earth in which all the directions eventually meet, in which there is no center because every point, or none, is center — an equal earth which all men occupy as equals. The airman's earth, if free men make it, will be truly round: a globe in practice, not in theory.</p>
+                    <p>For our first project during week 3 at MakerSquare, we were tasked with using what we've learned during the first two weeks of the program and creating something using <strong><a href="http://d3js.org/">D3.js</a></strong>. I partnered up with my friend <a href="https://github.com/jshen212">Jeff</a>, and we decided to make a tool that'd estimate Uber fares to select destinations from MakerSquare LA.</p>
 
-                    <p>Science cuts two ways, of course; its products can be used for both good and evil. But there's no turning back from science. The early warnings about technological dangers also come from science.</p>
+                    <img class="img-responsive" src="img/d3-uber-lax.png" alt="">
 
-                    <p>What was most significant about the lunar voyage was not that man set foot on the Moon but that they set eye on the earth.</p>
+                    <span class="caption text-muted">Here's a picture of the final product: 'high estimates' for a ride to LAX from the MakerSquare offices in Santa Monica.</span>
 
-                    <p>A Chinese tale tells of some men sent to harm a young girl who, upon seeing her beauty, become her protectors rather than her violators. That's how I felt seeing the Earth for the first time. I could not help but love and cherish her.</p>
+                    <p>In case you're not familiar with D3.js, it's a JavaScript library used to help you "bring data to life". It allows you to bind arbitrary data to the DOM, then apply transformations to your document based on the data. Here's a great collection of D3 projects you can check out to give you an idea of it's power: <a href="https://github.com/mbostock/d3/wiki/Gallery">D3 Gallery</a></p>
 
-                    <p>For those who have seen the Earth from space, and for the hundreds and perhaps thousands more who will, the experience most certainly changes your perspective. The things that we share in our world are far more valuable than those which divide us.</p>
+                    <p>For this project, Jeff and I noted during pre-planning that we would have to: successfully make AJAX calls to the Uber API, properly parse the received data to only store the properties we wanted, use D3 to append the data to our DOM, and use jQuery to add some event handlers for allowing the user to pick a destination.</p>
 
-                    <h2 class="section-heading">The Final Frontier</h2>
+                    <h2 class="section-heading">Uber API</h2>
 
-                    <p>There can be no thought of finishing for ‘aiming for the stars.’ Both figuratively and literally, it is a task to occupy the generations. And no matter how much progress one makes, there is always the thrill of just beginning.</p>
+                    <p>The first step of our project was to figure out how and what data to pull from Uber. After a few issues with authentication, we were able to successfully make the GET request from their price estimates endpoint. This allowed us to get data such as high and low estimates for each type of Uber ride, distance and duration of the ride, surge multiplier at time of request, and minimum fare.</p>
 
-                    <p>There can be no thought of finishing for ‘aiming for the stars.’ Both figuratively and literally, it is a task to occupy the generations. And no matter how much progress one makes, there is always the thrill of just beginning.</p>
+                    <img class="img-responsive" src="img/d3-uber-api.png" alt="">
 
-                    <blockquote>The dreams of yesterday are the hopes of today and the reality of tomorrow. Science has not yet mastered prophecy. We predict too much for the next year and yet far too little for the next ten.</blockquote>
+                    <span class="caption text-muted">Data from Uber price estimates. We parsed the data to only include 'high_estimates' and 'display_name'.</span>
 
-                    <p>Spaceflights cannot be stopped. This is not the work of any one man or even a group of men. It is a historical process which mankind is carrying out in accordance with the natural laws of human development.</p>
+                    <p>One thing to note here: to get pricing, you obviously need to give Uber coordinates (to/from) when you make the GET request. We initially wanted to do something where the user could type in their own to/from, and we'd submit the GET request with those coordinates, but seeing how we only had 2 days for this project, we decided to instead hardcode coordinates for just a few default places.</p>
 
-                    <h2 class="section-heading">Reaching for the Stars</h2>
+                    <p>Our AJAX call basically works like this: when the page loads, we make a GET request to Uber with our pre-loaded coordinates, and then upon a success, we store the parsed data in a local object so that we could access it immediately. By doing this, we also avoided any problems with trying to display data before it's received.</p>
 
-                    <p>As we got further and further away, it [the Earth] diminished in size. Finally it shrank to the size of a marble, the most beautiful you can imagine. That beautiful, warm, living object looked so fragile, so delicate, that if you touched it with a finger it would crumble and fall apart. Seeing this has to change a man.</p>
+                    <h2 class="section-heading">D3</h2>
 
-                    <a href="#">
-                        <img class="img-responsive" src="img/post-sample-image.jpg" alt="">
-                    </a>
-                    <span class="caption text-muted">To go places and do things that have never been done before – that’s what living is all about.</span>
+                    <img class="img-responsive" src="img/d3-uber-d3code.png" alt="">
 
-                    <p>Space, the final frontier. These are the voyages of the Starship Enterprise. Its five-year mission: to explore strange new worlds, to seek out new life and new civilizations, to boldly go where no man has gone before.</p>
+                    <span class="caption text-muted">Code snippet of D3.js in action.</span>
 
-                    <p>As I stand out here in the wonders of the unknown at Hadley, I sort of realize there’s a fundamental truth to our nature, Man must explore, and this is exploration at its greatest.</p>
+                    <p>Now that we had the data, we needed a way to populate the DOM dynamically. That's where D3 comes in, and in my humble opinion, shines. The D3 methods that we used basically did the following: selected a 'chart' div that we were going to append our newly created child div's to, calculated and set the widths of each child div dynamically based on the price of each ride, added text to each child div based on the type of ride, and added animation.  Another cool thing is that D3 allows you to chain methods, so you can really do a lot with just a few lines of code. As you can see below, our 'chart' div, which was empty in our index.html file, is now populated with exactly the data we want.</p>
 
-                    <p>Placeholder text by <a href="http://spaceipsum.com/">Space Ipsum</a>. Photographs by <a href="https://www.flickr.com/photos/nasacommons/">NASA on The Commons</a>.</p>
+                    <img class="img-responsive" src="img/d3-uber-dom.png" alt="">
+
+                    <span class="caption text-muted">Here's how our DOM looks like after D3 does it's magic.</span>
+
+                    <p>Last but not least, we needed to add some listeners to our page, so that when the user clicks on a new destination, we could re-render the DOM based on the new data. For this we used jQuery, more specifically the '.on' method, which attaches an event handler function for one or more events to selected elements. Basically whenever a destination is clicked, we invoke the 'createChart' function above that utilizes D3 to re-render the DOM.</p>
+
+                    <p>All in all, this project was a great learning experience, and it really showed us how powerful D3.js can be. I'm hoping to have a demo up soon for you all to check out.</p>
                 </div>
             </div>
         </div>
@@ -162,7 +161,7 @@
                             </a>
                         </li>
                     </ul>
-                    <p class="copyright text-muted">Copyright &copy; Your Website 2014</p>
+                    <p class="copyright text-muted">Copyright &copy; Richard Yu 2016</p>
                 </div>
             </div>
         </div>
